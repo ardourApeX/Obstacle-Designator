@@ -4,6 +4,11 @@
 #include<vector>
 #include<sstream>
 using namespace std;
+
+
+enum class State {kEmpty, kObstacle}; //Defining Enumerators
+
+
 vector<int> ParseLine(const string &S)  //Converting a string into vector
 {
 	istringstream my_stream(S);
@@ -16,6 +21,8 @@ vector<int> ParseLine(const string &S)  //Converting a string into vector
 	}
 	return Vector;
 }
+
+
 vector<vector<int>> ReadBoardFile(string Path) //Taking path of file
 {
 	ifstream fin; 
@@ -28,11 +35,20 @@ vector<vector<int>> ReadBoardFile(string Path) //Taking path of file
 			Board.push_back(ParseLine(Line));
 
 		}
-
 	}
 	return Board;
 	fin.close();
 }
+
+
+string CellString(State Cell)  //Function to assign Obstacle images
+{
+	if(Cell == State::kObstacle)
+		return"⛰️ ";
+	else
+		return "0 "; 
+}
+
 void PrintBoard(const vector<vector<int>> Board)
 {
 	for(auto I : Board){
@@ -41,7 +57,8 @@ void PrintBoard(const vector<vector<int>> Board)
 		cout<<"\n";
 	}
 }
-#include "test.cpp" //for testing
+
+
 int main()
 {
 	auto Board = ReadBoardFile("1.board");
