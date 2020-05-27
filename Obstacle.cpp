@@ -9,29 +9,35 @@ using namespace std;
 enum class State {kEmpty, kObstacle}; //Defining Enumerators
 
 
-vector<int> ParseLine(const string &S)  //Converting a string into vector
+// Function to generate vector of State from string (a line from 1.board file)
+vector<State> ParseLine(const string &S)  //Assigning State into a String
 {
 	istringstream my_stream(S);
-	int num;
-	vector<int>Vector; //For numeric values
+	int num; //For numeric values
 	char ch; //for ,
+	vector<State>Row; 
 	while(my_stream>>num>>ch)
 	{
-		Vector.push_back(num); //Pushig back to Vector
+		if(num == 0)
+			Row.push_back(State::kEmpty);
+		else
+			Row.push_back(State::kObstacle);
 	}
-	return Vector;
+	return Row; //Returning a Vector consist of States
 }
 
 
-vector<vector<int>> ReadBoardFile(string Path) //Taking path of file
+//Function to generate a 2D vector of State from 1.board file using ParseLine Function
+vector<vector<State>>ReadBoardFile(string Path) //Function to Convert Vector full of States
 {
 	ifstream fin; 
 	fin.open(Path);
-	vector<vector<int>> Board;  //Vector comprise of binary input from 1.board
+	vector<vector<State>> Board {};  //Vector comprise of binary input from 1.board
 	if(fin) //If such file exists then...
 	{
 		string Line;
-		while(getline(Fin, Line)){ //Copy the data line by line from object to Line 
+		while(getline(fin, Line)) //Copy the data line by line from object to Line 
+		{ 
 			Board.push_back(ParseLine(Line));
 
 		}
@@ -40,8 +46,8 @@ vector<vector<int>> ReadBoardFile(string Path) //Taking path of file
 	fin.close();
 }
 
-
-string CellString(State Cell)  //Function to assign Obstacle images
+//Function to return image of obstacle on the basis of state vector
+string CellString(State Cell)  
 {
 	if(Cell == State::kObstacle)
 		return"⛰️ ";
@@ -49,11 +55,12 @@ string CellString(State Cell)  //Function to assign Obstacle images
 		return "0 "; 
 }
 
-void PrintBoard(const vector<vector<int>> Board)
+void PrintBoard(const vector<vector<State>> Board)
 {
-	for(auto I : Board){
-		for(int J : I)
-			cout<<J;
+
+	for(auto I : Board){ //OR for(vector<State> I : Board)
+		for(auto J : I)  //OR for(State J : I)
+			cout<<CellString(J);
 		cout<<"\n";
 	}
 }
